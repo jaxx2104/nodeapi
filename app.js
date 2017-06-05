@@ -13,5 +13,9 @@ app.get('/users/:name?', (req, res) => {
     }
 })
 
+app.get('/items/:id([0-9]+)', (req, res) => {
+    res.send(`item no: ${req.params.id}`)
+})
+
 app.listen(3000)
 console.log('server starting...')
