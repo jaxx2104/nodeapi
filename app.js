@@ -14,6 +14,12 @@ app.use((req, res, next) => {
     next()
 })
 
+app.param('id', (req, res, next, id) => {
+    const users = ['zero', 'one', 'two', 'three']
+    req.params.name = users[id]
+    next()
+})
+
 app.get('/', (req, res) => {
     res.send('hello world')
 })
@@ -27,7 +33,8 @@ app.get('/users/:name?', (req, res) => {
 })
 
 app.get('/items/:id([0-9]+)', (req, res) => {
-    res.send(`item no: ${req.params.id}`)
+    // res.send(`item no: ${req.params.id}`)
+    res.send(`item no: ${req.params.id}, name: ${req.params.name}`)
 })
 
 app.get('/file', (req, res) => {
