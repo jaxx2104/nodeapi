@@ -1,7 +1,14 @@
 const express = require('express')
-app = express()
+const morgan = require('morgan');
+const app = express()
 
+// middleware
+app.use(morgan('dev'))
 app.use(express.static(`${__dirname}/dist`))
+app.use((req, res, next) => {
+    console.log('my custom middleware')
+    next()
+})
 
 app.get('/', (req, res) => {
     res.send('hello world')
