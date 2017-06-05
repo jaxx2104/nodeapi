@@ -1,6 +1,9 @@
 const express = require('express')
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
+const expressSession = require('express-session')
+const cookieParser   = require('cookie-parser')
+const csrf = require('csurf')
 const app = express()
 
 // templates
@@ -11,6 +14,13 @@ app.set('view engine', 'ejs')
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(morgan('dev'))
 app.use(express.static(`${__dirname}/dist`))
+app.use(cookieParser());
+app.use(expressSession({
+    secret: process.env.SESSION_SECRET || 'session secret',
+    resave: false,
+    saveUninitialized: false
+}));
+app.use(csrf());
 app.use((req, res, next) => {
     console.log('my custom middleware')
     next()
