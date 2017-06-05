@@ -1,5 +1,6 @@
 const express = require('express')
 const morgan = require('morgan');
+const bodyParser = require('body-parser');
 const app = express()
 
 // templates
@@ -7,6 +8,7 @@ app.set('views', `${__dirname}/views`)
 app.set('view engine', 'ejs')
 
 // middleware
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(morgan('dev'))
 app.use(express.static(`${__dirname}/dist`))
 app.use((req, res, next) => {
@@ -41,8 +43,17 @@ app.get('/file', (req, res) => {
     res.sendFile(`${__dirname}/dist/hello.json`)
 })
 
-app.get('/template', (req, res) => {
-    res.render('index', {title: 'hello ejs'})
+app.get('/user', (req, res) => {
+    res.render('index', {title: 'hello ejs', username: 'sample'})
+})
+
+app.post('/user', (req, res) => {
+    var username = req.param('username');
+    if (username) {
+        res.render('index', {title: 'Express Sample', username: username});
+    } else {
+        res.render('error', {title: 'Express Sample', error: 'Unknown username or password.'});
+    }
 })
 
 app.listen(3000)
